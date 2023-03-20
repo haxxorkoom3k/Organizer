@@ -1,0 +1,36 @@
+
+body {
+    background-color: grey;
+}
+
+.form-wrapper {
+    width: 100%;
+    height: 80vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-wrapper > .loginForm, .form-wrapper > .registerForm {
+    display: flex;
+    flex-direction: column;
+
+
+}
+
+.navLinksStyle {
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.navLinksStyle > a {
+    text-decoration: none;
+}
+
+.navLinksStyle > a:hover {
+    color: rgb(185, 185, 185);
+    transition: color .4s;
+}
