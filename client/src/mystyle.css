@@ -1,3 +1,6 @@
+:root {
+    --calc_size: calc(1vw + 1vh);
+}
 
 body {
     background-color: grey;
@@ -15,12 +18,10 @@ body {
 .form-wrapper > .loginForm, .form-wrapper > .registerForm {
     display: flex;
     flex-direction: column;
-
-
 }
 
 .navLinksStyle {
-    width: 10%;
+    width: 40%;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -28,9 +29,29 @@ body {
 
 .navLinksStyle > a {
     text-decoration: none;
+    fill: white;
 }
 
 .navLinksStyle > a:hover {
     color: rgb(185, 185, 185);
-    transition: color .4s;
+    fill: rgb(185, 185, 185);
+    transition: all .4s;
+}
+
+.success_wrapper {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Profile {
+    width: 50%;
+}
+
+.Profile > a {
+    font-size: calc(var(--calc_size) * .7);
+    text-decoration: none;
+    color: bisque;
 }

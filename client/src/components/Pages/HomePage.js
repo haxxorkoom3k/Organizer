@@ -1,11 +1,9 @@
 import React from 'react'
-import NavBar from '../UI/NavBar'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 
 const HomePage = () => {
   return (
-    <h3>test</h3>
+    <h3>Это главная страница и она вас приветствует!</h3>
   )
 }
 

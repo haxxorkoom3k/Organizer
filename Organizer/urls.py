@@ -28,5 +28,6 @@ urlpatterns = [
     path('api/user', views.UserAPI.as_view(), name='LoginData'),
     path('api/token/obtain', TokenObtainPairView.as_view(), name='token_obtain'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
-
+    path('api/notes/<int:pk>', views.getNote, name='note_api'),
+    path('api/note', views.getNotesList, name='notes-list'),
 ]

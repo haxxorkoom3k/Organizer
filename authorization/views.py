@@ -1,14 +1,15 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes, renderer_classes
+from rest_framework.renderers import JSONRenderer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from authorization.serializers import UserSerializer, CreateUserSerializer
+from authorization.serializers import UserSerializer, CreateUserSerializer, NoteSerializer
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
-from rest_framework import generics
-from rest_framework import status
+from rest_framework import generics, status, viewsets
+from .models import Notes
 
 
 
@@ -44,3 +45,30 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+    
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+@api_view(['GET', 'PUT', 'DELETE'])
+def getNote(request, pk):
+    if request.method == 'GET':
+        notes = Notes.objects.get(owner=request.user, id=pk)
+        serializer = NoteSerializer(notes, many=False)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        data = request.data
+        note = Notes.objects.get(owner=request.user, id=pk)
+        serializer = NoteSerializer(instance=note, data=data)
+    if request.method == 'DELETE':
+        note = Notes.objects.get(owner=request.user, id=pk)
+        note.delete()
+        return Response('Заметка удалена')
+
+@renderer_classes((JSONRenderer))
+@api_view(('GET',))
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def getNotesList(request):
+    notes = Notes.objects.all()
+    serializer = NoteSerializer(notes, many=True)
+    return Response(serializer.data)
