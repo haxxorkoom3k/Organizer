@@ -10,6 +10,7 @@ import UserProfile from './components/Pages/UserProfile';
 import NotFound from './components/UI/NotFound';
 import Notes from './components/Pages/Notes';
 import NotesList from './components/Pages/NotesList';
+import NoteCreate from './components/Pages/NoteCreate';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route exact path='user/profile' element={<UserProfile />} />
           <Route exact path='user/note/:id' element={<Notes />} />
           <Route exact path='user/note' element={<NotesList />} />
+          <Route exact path='user/create-note' element={<NoteCreate />} />
         </Routes>
       </BrowserRouter>
     </div>

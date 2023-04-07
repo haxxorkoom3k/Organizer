@@ -30,6 +30,8 @@ body {
 .navLinksStyle > a {
     text-decoration: none;
     fill: white;
+    display: flex;
+    align-items: center;
 }
 
 .navLinksStyle > a:hover {
@@ -54,4 +56,26 @@ body {
     font-size: calc(var(--calc_size) * .7);
     text-decoration: none;
     color: bisque;
+}
+
+.NoteCreateWrapper {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.NoteCreateForm {
+    width: 50%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.w50p {
+    width: 50%;
 }

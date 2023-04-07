@@ -8,9 +8,9 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from authorization.serializers import UserSerializer, CreateUserSerializer, NoteSerializer
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
-from rest_framework import generics, status, viewsets
+from rest_framework import generics, status
+from rest_framework.views import APIView
 from .models import Notes
-
 
 
 class RegistrationAPI(CreateAPIView):
@@ -64,11 +64,33 @@ def getNote(request, pk):
         note.delete()
         return Response('Заметка удалена')
 
+
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+class noteCreateAPI(generics.CreateAPIView):
+    serializer_class = NoteSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+    
+
+
+
+def noteUpdate(request, pk):
+    data = request.data
+    note = Notes.objects.get(id=pk)
+    serializer = NoteSerializer(instance=note, data=data)
+
+    if serializer.is_valid():
+        serializer.save()
+    
+    return serializer.data
+
 @renderer_classes((JSONRenderer))
 @api_view(('GET',))
 @permission_classes([IsAuthenticated])
 @authentication_classes([JWTAuthentication])
 def getNotesList(request):
-    notes = Notes.objects.all()
+    notes = Notes.objects.all().filter(owner=request.user).order_by('-update')
     serializer = NoteSerializer(notes, many=True)
     return Response(serializer.data)

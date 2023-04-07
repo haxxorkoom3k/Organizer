@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const NotesList = () => {
   
@@ -48,7 +49,7 @@ const NotesList = () => {
         <div>
             {access?
             <div>
-                <h2>Ваши заметки</h2>
+                <h2>У вас {notes.length} заметки <Link to='/user/create-note' >Добавить ещё</Link> </h2>
                 <div className='d-flex'>
                     {NoteParse}
                 </div>

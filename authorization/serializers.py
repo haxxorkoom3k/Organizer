@@ -1,4 +1,5 @@
 from rest_framework.serializers import ModelSerializer, Serializer, CharField
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from authorization.models import Notes
@@ -37,15 +38,10 @@ class LoginRequestSerializer(Serializer):
     password = CharField(required=True)
 
 
-class NoteSerializer(serializers.ModelSerializer):
+class NoteSerializer(ModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Notes
         fields = ['pk', 'owner', 'title', 'body']
-        
-    def save(self, *args, **kwargs):
-        note = Notes(
-            title = self.validated_data['title'],
-            body = self.validated_data['body'],
-        )
-        note.save(owner=self.request.user)
-        
+  
