@@ -49,12 +49,14 @@ const UserProfile = () => {
     <div>
       {error? <p>{error}</p> : null}
       {access?
-        <div>
-          <h1>Добро пожаловать, {username}!</h1>
-          <h3>Инфо:</h3>
-          <p>Дата регистрации {dateJoined}</p>
-          <p>Email: {email}</p>
-          <button onClick={Logout}>Тестовый выход</button>
+        <div className='userprof-wrapper'>
+          <div className='alert m-3'>
+            <h1>Добро пожаловать, {username}!</h1>
+            <h3>Инфо:</h3>
+            <p>Дата регистрации {dateJoined}</p>
+            <p>Email: {email}</p>
+            <button onClick={Logout}>Тестовый выход</button>
+          </div>
         </div>
             :
             null

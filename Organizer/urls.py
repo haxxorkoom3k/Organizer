@@ -31,4 +31,11 @@ urlpatterns = [
     path('api/notes/<int:pk>', views.getNote, name='note'),
     path('api/note', views.getNotesList, name='notes-list'),
     path('api/note-create', views.noteCreateAPI.as_view(), name='create-note'),
+    path('api/new-tag', views.tagsCreateAPI.as_view(), name='create-tag'),
+    path('api/get-taglist', views.getUserTags, name='user-tags-list'),
+    path('api/delete-note/<int:pk>', views.noteDeleteAPI.as_view(), name='delete-note'),
+    path('api/new-todo', views.ToDoCreateAPI.as_view(), name='new-todo'),
+    path('api/get-todolist', views.getUserToDo, name='user-todo-list'),
+    path('api/get-todotags', views.getToDoChoice, name='todo-tags'),
+    path('api/delete-todo/<int:pk>', views.DeleteUserToDo.as_view(), name='delete-todo'),
 ]

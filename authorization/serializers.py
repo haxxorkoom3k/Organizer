@@ -2,7 +2,7 @@ from rest_framework.serializers import ModelSerializer, Serializer, CharField
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from authorization.models import Notes
+from authorization.models import Notes, Tags, ToDo, ToDo_tags
 from rest_framework import request
 
 class UserSerializer(ModelSerializer):
@@ -43,5 +43,21 @@ class NoteSerializer(ModelSerializer):
 
     class Meta:
         model = Notes
-        fields = ['pk', 'owner', 'title', 'body']
+        fields = ['pk', 'owner', 'title', 'body', 'tag', 'update', 'created']
   
+class TagsSerializer(ModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), default=serializers.CurrentUserDefault())
+    class Meta:
+        model = Tags
+        fields = ['pk', 'owner', 'title']
+
+class ToDoSerializer(ModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), default=serializers.CurrentUserDefault())
+    class Meta:
+        model = ToDo
+        fields = ['pk', 'owner', 'tag', 'completed', 'update', 'created']
+
+class ToDoTagsSerializer(ModelSerializer):
+    class Meta:
+        model = ToDo_tags
+        fields = ['pk', 'title']

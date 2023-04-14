@@ -5,12 +5,12 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from authorization.serializers import UserSerializer, CreateUserSerializer, NoteSerializer
-from rest_framework.generics import CreateAPIView
+from authorization.serializers import UserSerializer, CreateUserSerializer, NoteSerializer, TagsSerializer, ToDoSerializer, ToDoTagsSerializer
+from rest_framework.generics import CreateAPIView, DestroyAPIView
 from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.views import APIView
-from .models import Notes
+from .models import Notes, Tags, ToDo, ToDo_tags
 
 
 class RegistrationAPI(CreateAPIView):
@@ -72,9 +72,30 @@ class noteCreateAPI(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+class noteDeleteAPI(DestroyAPIView):
+    queryset = Notes.objects.all()
+    serializer_class = NoteSerializer
     
 
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+class tagsCreateAPI(generics.CreateAPIView):
+    serializer_class = TagsSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+@renderer_classes((JSONRenderer))
+@api_view(('GET',))
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def getUserTags(request):
+    tag = Tags.objects.all().filter(owner=request.user)
+    serializer = TagsSerializer(tag, many=True)
+    return Response(serializer.data)
 
 def noteUpdate(request, pk):
     data = request.data
@@ -94,3 +115,27 @@ def getNotesList(request):
     notes = Notes.objects.all().filter(owner=request.user).order_by('-update')
     serializer = NoteSerializer(notes, many=True)
     return Response(serializer.data)
+
+class ToDoCreateAPI(generics.CreateAPIView):
+    serializer_class = ToDoSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def getUserToDo(request):
+    todo = ToDo.objects.all().filter(owner=request.user).order_by('-update')
+    serializer = ToDoSerializer(todo, many=True)
+    return Response(serializer.data)
+
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def getToDoChoice(request):
+    todo_tag = ToDo_tags.objects.all()
+    serializer = ToDoTagsSerializer(todo_tag, many=True)
+    return Response(serializer.data)
+
+class DeleteUserToDo(DestroyAPIView):
+    queryset = ToDo.objects.all()
+    serializer_class = ToDoSerializer

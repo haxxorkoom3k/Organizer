@@ -18,16 +18,33 @@ class Tags(models.Model):
     title = models.CharField(max_length=20)
 
     def __str__(self):
-        return self.title
+        return f"{self.owner} - {self.title}"
 
 class Notes(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, null=True, blank=True)
     body = models.TextField(blank=True, null=True)
-    tag = models.ForeignKey(Tags, blank=True, null=True, on_delete=models.PROTECT)
+    tag = models.CharField(max_length=20, blank=True, null=True)
     update = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.owner} - {self.title}"
     
+class ToDo(models.Model):
+
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50, null=True, blank=True)
+    tag = models.CharField(max_length=20, blank=True, null=True)
+    completed = models.CharField(max_length=15)
+    update = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.owner} - {self.title}'
+    
+class ToDo_tags(models.Model):
+    title = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.title
