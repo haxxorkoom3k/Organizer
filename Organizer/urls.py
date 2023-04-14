@@ -37,5 +37,5 @@ urlpatterns = [
     path('api/new-todo', views.ToDoCreateAPI.as_view(), name='new-todo'),
     path('api/get-todolist', views.getUserToDo, name='user-todo-list'),
     path('api/get-todotags', views.getToDoChoice, name='todo-tags'),
-    path('api/delete-todo/<int:pk>', views.DeleteUserToDo.as_view(), name='delete-todo'),
+    path('api/delete-todo/<int:pk>', views.DeleteUserToDo.as_view(), name='delete-todo')
 ]
