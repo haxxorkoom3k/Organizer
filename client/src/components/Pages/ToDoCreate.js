@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
 const ToDoCreate = () => {
 
@@ -6,9 +6,7 @@ const ToDoCreate = () => {
   const [ cTag, setCTag ] = useState([])
   const [ todoTag, setToDoTag ] = useState('')
   const [ access ] = useState(localStorage.getItem('accessToken'))
-  
 
-  const 
 
   const completeFetch = async () => {
     await fetch(
@@ -28,7 +26,7 @@ const ToDoCreate = () => {
         throw Error(`Что-то пошло не так: код ${response.status}`)
        }
       }).then(data => {
-        setFTag(data)
+        setCTag(data)
       })
     }
         
@@ -38,7 +36,7 @@ const ToDoCreate = () => {
       }
     }, [access])
   
-    let tagParse = fTag.map(function(item){
+    let tagParse = cTag.map(function(item){
       return <option key={item.pk}>{item.title}</option>
     })
   
