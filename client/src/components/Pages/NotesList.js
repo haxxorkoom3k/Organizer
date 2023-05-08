@@ -4,9 +4,8 @@ import { Link } from 'react-router-dom'
 
 const NotesList = () => {
   
+    const [ access ] = useState(localStorage.getItem('accessToken'))
     const [ notes, setNotes ] = useState([])
-
-  const [ access ] = useState(localStorage.getItem('accessToken'))
   
     const notesFetch = async () => {
         await fetch('/api/note',
@@ -48,17 +47,18 @@ const NotesList = () => {
         ).then((response) => {
             if (response.ok) {
                 console.log(`удаление заметки с ${response.status}`)
+                window.location.reload()
             } else {
                 throw Error(`ошибка! ${response.status}`)
             }
         }).catch(error => {
-            console.log(`оишбка! ${error}`)
+            console.log(`ошибка! ${error}`)
         })
     }
 
     let NoteParse = notes.map(function(item) {
         return <div key={item.pk} className='card border-primary m-3'>
-                <div className='card-header'>{item.title}</div>
+                <Link className='card-header noteTitle' to={`/user/note/${item.pk}`}>{item.title}</Link>
                 <div className='card-body'>
                   <h4 className='card-title'>{item.body}</h4>
                   <p className='card-text'>{item.tag}</p>
@@ -79,7 +79,7 @@ const NotesList = () => {
             :
             !access?
                 <div>
-                    а всё, ты не авторизован.
+                    <h2 className='alert'>а всё, ты не авторизован.</h2>
                 </div>
             :
             null

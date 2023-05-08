@@ -122,10 +122,13 @@ const Login = () => {
             <div className='form-wrapper'>
               <form className="loginForm alert" onSubmit={submitHandler}>
                 <h2>Авторизация</h2>
-                <label htmlFor='username'>Имя пользователя: </label>
-                <input type="text" name="username" value={formUsername} onChange={e => setFormUsername(e.target.value)} placeholder="Username" required />
-                <label htmlFor='password'>Пароль</label>
-                <input type="password" name="password" value={formPassword} onChange={e => setFormPassword(e.target.value)} placeholder="Password" required />
+                <hr />
+                  <label className='rlinput' htmlFor='username'>Имя пользователя</label>
+                  <input className='rlstyle' type="text" name="username" value={formUsername} onChange={e => setFormUsername(e.target.value)} placeholder="Username" required />
+
+                  <label className='rlinput' htmlFor='password'>Пароль</label>
+                  <input className='rlstyle' type="password" name="password" value={formPassword} onChange={e => setFormPassword(e.target.value)} placeholder="Password" required />
+
                 <input type="submit" name="submit" value="Войти"/>
                 <Link to='/user/register'>Нет аккаунта?</Link>
               </form>

@@ -34,9 +34,9 @@ class Notes(models.Model):
 class ToDo(models.Model):
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=50, null=True, blank=True)
+    title = models.CharField(max_length=50)
     tag = models.CharField(max_length=20, blank=True, null=True)
-    completed = models.CharField(max_length=15)
+    completed = models.CharField(max_length=15, null=True, blank=True, default='Нет')
     update = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -44,7 +44,27 @@ class ToDo(models.Model):
         return f'{self.owner} - {self.title}'
     
 class ToDo_tags(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=15)
 
     def __str__(self):
-        return self.title
+        return f'{self.username} - {self.title}'
+    
+class Spend(models.Model):
+
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    tag = models.CharField(max_length=15, blank=True, null=True)
+    date = models.DateField(auto_now=True)
+    update = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.owner} - {self.title}'
+    
+class SpendTags(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=15)
+
+    def __str__(self):
+        return f'{self.owner} - {self.title}'

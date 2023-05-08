@@ -41,7 +41,7 @@ const ToDoCreate = () => {
     })
   
   const selectHandler = (e) => {
-    setCTag(e.target.value)
+    setToDoTag(e.target.value)
   }
 
   const submitHandler = (e) => {
@@ -57,11 +57,11 @@ const ToDoCreate = () => {
         },
         body: JSON.stringify({
           title: formTitle,
-          completed: todoTag,
+          tag: todoTag,
       })
       }).then(response => {
           if (response.ok) {
-             console.log("response point 1 ok")
+             console.log("response point 2 ok")
           }
       }).catch(error => {
          console.log(error)
@@ -70,8 +70,15 @@ const ToDoCreate = () => {
   }
 
   return (
-    <div>
-        скоро здесь будет todo
+    <div className='alert'>
+        <form className='NoteCreateForm alert m-3' onSubmit={submitHandler}>
+          <h2>Новый ToDo</h2>
+          <input className='form-control mb-1' type='text' name='title' onChange={e => setFormTitle(e.target.value)} placeholder='Название' required />
+          <select className='form-select mb-2' onChange={selectHandler}>
+            {tagParse}
+          </select>
+          <input className='w50p form-control' type="submit" name="submit" value="Создать ToDo" />
+        </form>
     </div>
   )
 }

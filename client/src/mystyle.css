@@ -2,6 +2,17 @@
     --calc_size: calc(1vw + 1vh);
 }
 
+.myFontSize {
+    font-size: calc(var(--calc_size) * .8);
+}
+
+.myLinkStyle {
+    text-decoration: none;
+}
+
+.myLinkStyle:hover {
+    color: white;
+}
 
 .form-wrapper {
     width: 100%;
@@ -17,6 +28,10 @@
     flex-direction: column;
 }
 
+.form-wrapper > .loginForm > input[type='submit'], .form-wrapper > .registerForm > input[type='submit'] {
+    margin-top: 10%;
+}
+
 .navLinksStyle {
     width: 40%;
     display: flex;
@@ -29,6 +44,7 @@
     fill: white;
     display: flex;
     align-items: center;
+    font-size: calc(var(--calc_size) * .45);
 }
 
 .navLinksStyle > a:hover {
@@ -53,6 +69,16 @@
     font-size: calc(var(--calc_size) * .7);
     text-decoration: none;
     color: bisque;
+}
+
+.infoblock {
+    display: flex;
+    width: 40%;
+    justify-content: space-around;
+}
+
+.infoblock > div:last-child {
+    fill: white;
 }
 
 .NoteCreateWrapper {
@@ -133,10 +159,26 @@
 .button-submit-form {
     background: #525252;
     border-radius: 12px;
+    border: none;
 }
 
 .button-submit-form:hover {
     background: #b4b4b4;
     color: black;
     transition: all .6s;
+    border: none;
+}
+
+.h2-color {
+    color: white;
+}
+
+.noteTitle {
+    text-decoration: none;
+    color: white;
+}
+
+.noteTitle:hover {
+    color: aqua;
+    transition: color .5s;
 }

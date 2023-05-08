@@ -35,12 +35,6 @@ const NoteCreate = () => {
           tagsFetch()
       }
   }, [access])
-        
-    useEffect(() => {
-      if (access) {
-          tagsFetch()
-      }
-    }, [access])
 
     let tagParse = fTag.map(function(item){
       return <option key={item.pk}>{item.title}</option>
