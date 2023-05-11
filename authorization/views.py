@@ -7,13 +7,14 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from authorization.serializers import UserSerializer, CreateUserSerializer, NoteSerializer, TagsSerializer, ToDoSerializer, ToDoTagsSerializer, SpendSerializer, SpendTagsSerializer
-from rest_framework.generics import CreateAPIView, DestroyAPIView, UpdateAPIView, RetrieveUpdateDestroyAPIView
+from authorization.serializers import UserSerializer, CreateUserSerializer, NoteSerializer, TagsSerializer, ToDoSerializer, ToDoTagsSerializer, SpendSerializer, SpendTagsSerializer, SearchSerializer
+from rest_framework.generics import CreateAPIView, DestroyAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework import generics, status
-from django.db.models import Sum
-from rest_framework.views import APIView
 from .models import Notes, Tags, ToDo, ToDo_tags, Spend, SpendTags
+from rest_framework import filters
+from rest_framework.filters import SearchFilter
+from django.db.models import Q
 
 
 class RegistrationAPI(CreateAPIView):
@@ -93,6 +94,12 @@ class noteDetail(RetrieveUpdateDestroyAPIView):
     queryset = Notes.objects.all()
     lookup_field = 'pk'
 
+    def get_object(self):
+        obj = super().get_object()
+        if obj.owner != self.request.user:
+            raise PermissionError
+        return obj
+
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
     
@@ -139,6 +146,12 @@ class getToDo(RetrieveUpdateDestroyAPIView):
     serializer_class = ToDoSerializer
     queryset = ToDo.objects.all()
     lookup_field = 'pk'
+
+    def get_object(self):
+        obj = super().get_object()
+        if obj.owner != self.request.user:
+            raise PermissionError
+        return obj
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
@@ -189,6 +202,12 @@ class SpendUpdateDeleteAPI(RetrieveUpdateDestroyAPIView):
     serializer_class = SpendSerializer
     queryset = Spend.objects.all()
     lookup_field = 'pk'
+
+    def get_object(self):
+        obj = super().get_object()
+        if obj.owner != self.request.user:
+            raise PermissionError
+        return obj
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
@@ -241,6 +260,12 @@ class SpendTagsUpdateDeleteAPI(RetrieveUpdateDestroyAPIView):
     queryset = SpendTags.objects.all()
     lookup_field = 'pk'
 
+    def get_object(self):
+        obj = super().get_object()
+        if obj.owner != self.request.user:
+            raise PermissionError
+        return obj
+
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
     
@@ -270,3 +295,45 @@ def GetUserSpendTags(request):
 class DeleteUserSpendTag(DestroyAPIView):
     queryset = SpendTags.objects.all()
     serializer_class = SpendSerializer
+
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+class NoteSearch(generics.ListAPIView):
+    serializer_class = NoteSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['title', 'tag']
+
+    def get_queryset(self):
+        queryset = Notes.objects.filter(owner=self.request.user)
+        search_query = self.request.query_params.get('search', None)
+        if search_query is not None:
+            queryset = queryset.filter(Q(title__iexact=search_query) | Q(tag__iexact=search_query))
+        return queryset
+    
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+class ToDoSearch(generics.ListAPIView):
+    serializer_class = ToDoSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['title', 'tag']
+
+    def get_queryset(self):
+        queryset = ToDo.objects.filter(owner=self.request.user)
+        search_query = self.request.query_params.get('search', None)
+        if search_query is not None:
+            queryset = queryset.filter(Q(title__icontains=search_query) | Q(tag__icontains=search_query))
+        return queryset
+    
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+class SpendSearch(generics.ListAPIView):
+    serializer_class = SpendSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['title', 'tag']
+
+    def get_queryset(self):
+        queryset = Spend.objects.filter(owner=self.request.user)
+        search_query = self.request.query_params.get('search', None)
+        if search_query is not None:
+            queryset = queryset.filter(Q(title__iexact=search_query) | Q(tag__iexact=search_query))
+        return queryset

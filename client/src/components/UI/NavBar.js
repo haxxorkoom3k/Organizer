@@ -6,6 +6,7 @@ import { ReactComponent as ToDoSVG } from './Icons/to-do.svg'
 import { ReactComponent as LoginSVG } from './Icons/login.svg'
 import { ReactComponent as SettingsSVG } from './Icons/Settings.svg'
 import { ReactComponent as AccountSVG } from './Icons/Account.svg'
+import { ReactComponent as SearchSVG } from './Icons/search.svg'
 
 const NavBar = () => {
   
@@ -65,8 +66,9 @@ const NavBar = () => {
           <div className="container-fluid m-1">
             <h2><Link to='/' className="navbar-brand myFontSize">Monokuro</Link></h2>
             <div className='navLinksStyle'>
+              <Link to='user/search'><SearchSVG />Поиск</Link>
               <Link to='user/note'><NoteSVG />Заметки</Link>
-              <Link to='user/spend'><WalletSVG />Траты</Link>
+              <Link to='user/spend'><WalletSVG />Покупки</Link>
               <Link to='user/todo-list'><ToDoSVG />To-Do</Link>
               <Link to='/user/profile'><AccountSVG /> Привет, {username}</Link>
               <Link to='user/settings' ><SettingsSVG />Настройки</Link>

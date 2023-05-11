@@ -51,4 +51,7 @@ urlpatterns = [
     path('api/spend-tags', views.GetSpendTagsList, name='spend-tags-list'),
     path('api/spend-tags/<int:pk>', views.SpendTagsUpdateDeleteAPI.as_view(), name='spend-tags-detail'),
     path('api/spend-tags/<int:pk>/delete', views.DeleteUserSpendTag.as_view(), name='spend-tag-delete'),
+    path('api/search/note/', views.NoteSearch.as_view(), name='search-note'),
+    path('api/search/todo/', views.ToDoSearch.as_view(), name='search-todo'),
+    path('api/search/spend/', views.SpendSearch.as_view(), name='seach-spend'),
 ]

@@ -8,7 +8,7 @@ from rest_framework import request
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'date_joined']
+        fields = ['id', 'username', 'email', 'date_joined']
 
         
 class CreateUserSerializer(ModelSerializer):
@@ -74,3 +74,14 @@ class SpendTagsSerializer(ModelSerializer):
     class Meta:
         model = SpendTags
         fields = ['pk', 'owner', 'title']
+
+class SearchSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField(max_length=100)
+    type = serializers.CharField()
+    
+    def to_representation(self, instance):
+        record_type = instance.__class__.__name__.lower()
+        data = super().to_representation(instance)
+        data['type'] = record_type
+        return data

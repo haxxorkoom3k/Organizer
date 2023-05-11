@@ -63,7 +63,7 @@ const Spend = () => {
         return <div key={item.pk} className="card border-secondary m-3">
                     <Link className="card-header noteTitle" to={`/user/spend/${item.pk}`}>{item.title}</Link>
                     <div className="card-body">
-                      <h4 className="card-title">{item.amount}</h4>
+                      <h4 className="card-title">{item.amount} &#x20bd;</h4>
                       <p className="card-text">{item.tag}</p>
                     </div>
                 </div>

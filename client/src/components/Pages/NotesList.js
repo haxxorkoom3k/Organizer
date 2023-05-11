@@ -72,7 +72,7 @@ const NotesList = () => {
             {access?
             <div className='notelist'>
                 <h2>Количество заметок: {notes.length} <Link className='myButton' to='/user/create-note'>Добавить ещё</Link></h2>
-                <div className='d-flex'>
+                <div className='displayRecords'>
                     {NoteParse}
                 </div>
             </div>

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 const NoteUpdate = () => {
 
     const { id } = useParams()
+    const [ loading, setLoading ] = useState()
     const [ note, setNote ] = useState([])
     const [ noteTitle, setNoteTitle ] = useState('')
     const [ noteBody, setNoteBody ] = useState("")
@@ -12,6 +13,7 @@ const NoteUpdate = () => {
     const [ access ] = useState(localStorage.getItem('accessToken'))
 
     const noteDataFetch = (id) => {
+      setLoading(true)
         fetch(
             `/api/note/${id}`,
             {
@@ -32,11 +34,10 @@ const NoteUpdate = () => {
           setNoteTitle(data.title)
           setNoteBody(data.body)
           setNoteTag(data.tag)
-        })
+        }).finally(
+          setLoading(false)
+        )
     }
-
-
-    console.log(note)
 
     useEffect(() => {
       if (access) {
@@ -139,7 +140,7 @@ const NoteUpdate = () => {
   return (
     <div>
         <form className='NoteCreateForm alert m-3' onSubmit={updatedNote}>
-          <h2>Новая заметка</h2>
+          <h2>Изменение заметки</h2>
           <input className='form-control mb-1' defaultValue={note.title} onChange={e => setNoteTitle(e.target.value)} type='text' name='title' placeholder='Название' />
           <textarea className='form-control m-1' defaultValue={note.body} onChange={e => setNoteBody(e.target.value)} placeholder='Текст заметки' rows={10} cols={20}/>
           <select className='form-select mb-2' onChange={selectHandler}>

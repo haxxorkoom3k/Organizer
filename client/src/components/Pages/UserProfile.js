@@ -4,6 +4,7 @@ import { ReactComponent as NoteSVG } from '../UI/Icons/Note.svg'
 import { ReactComponent as WalletSVG } from '../UI/Icons/wallet.svg'
 import { ReactComponent as ToDoSVG } from '../UI/Icons/to-do.svg'
 
+
 const UserProfile = () => {
     
       const [ access ] = useState(localStorage.getItem('accessToken'))
@@ -55,6 +56,8 @@ const UserProfile = () => {
          setUsername(data.username)
          setEmail(data.email)
          setDateJoined(data.date_joined)
+         console.log(data)
+         localStorage.setItem('uid', data.id)
        })
       }
     }, [access])
@@ -125,7 +128,6 @@ const UserProfile = () => {
       }
     }, [access])
 
-        
     return (
     <div>
       {error? <p>{error}</p> : null}
@@ -145,8 +147,8 @@ const UserProfile = () => {
             </div>
           </div>
         </div>
-            :
-            null
+        :
+         null
         }
     </div>
   )
