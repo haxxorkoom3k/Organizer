@@ -53,23 +53,48 @@ const ToDoList = () => {
         })
   }
 
-  let ToDoParse = toDo.map(function(item) {
-    return  <div key={item.pk} className='card border-primary m-3'>
-              <Link className='card-header noteTitle' to={`/user/todo/${item.pk}`}>{item.title}</Link>
-              <div className='card-body'>
-                <p className='card-text'>{item.tag}</p>
-                <button className='button-submit-form' onClick={() => deleteToDo(item.pk)}>Удалить</button>
+  let completed = 0
+  let completedTasks = toDo.map(function(item) {
+    if (item.completed === 'Да') {
+      completed += 1
+      return  <div key={item.pk} className='card border-success m-3 grid-item'>
+                <Link className='card-header noteTitle' to={`/user/todo/${item.pk}`}>{item.title}</Link>
+                <div className='card-body'>
+                  <p className='card-text'>{item.tag}</p>
+                  <button className='button-submit-form' onClick={() => deleteToDo(item.pk)}>Удалить</button>
+                </div>
               </div>
-            </div>
+    }
   })
+
+  let incomplete = 0
+  let incompletedTasks = toDo.map(function(item) {
+    if (item.completed === 'Нет') {
+      incomplete += 1
+      return  <div key={item.pk} className='card border-danger m-3 grid-item'>
+                <Link className='card-header noteTitle' to={`/user/todo/${item.pk}`}>{item.title}</Link>
+                <div className='card-body'>
+                  <p className='card-text'>{item.tag}</p>
+                  <button className='button-submit-form' onClick={() => deleteToDo(item.pk)}>Удалить</button>
+                </div>
+              </div>
+    }
+  })
+
+  console.log(toDo)
 
   return (
     <div>
       {access?
         <div className='m-3'>
-          <h2>Количество ToDo: {toDo.length} <Link className='myButton' to='/user/create-todo'>Создать ToDo</Link></h2>
-          <div className='d-flex'>
-            {ToDoParse}
+          <h2>Количество задач: {toDo.length} <Link className='myButton' to='/user/create-todo'>Добавить новую</Link></h2>
+          <h3 className='mt-3'>Выполнено: {completed}</h3>
+          <div className='grid'>
+              {completedTasks}
+          </div>
+          <h3>В процессе: {incomplete}</h3>
+          <div className='grid'>
+            {incompletedTasks}
           </div>
         </div>
       :

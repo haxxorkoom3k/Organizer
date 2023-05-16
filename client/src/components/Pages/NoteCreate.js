@@ -78,6 +78,7 @@ const NoteCreate = () => {
           <input className='form-control mb-1' type='text' name='title' onChange={e => setFormTitle(e.target.value)} placeholder='Название' required />
           <textarea className='form-control m-1' onChange={e => setFormNote(e.target.value)} placeholder='Текст заметки' rows={10} cols={20}/>
           <select className='form-select mb-2' onChange={selectHandler}>
+            <option></option>
             {tagParse}
           </select>
           <input className='w50p form-control' type="submit" name="submit" value="Сохранить заметку" />

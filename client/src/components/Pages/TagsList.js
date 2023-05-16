@@ -58,7 +58,7 @@ const TagsList = () => {
   }
 
     let tagsParse = tags.map(function(item) {
-      return  <div key={item.pk} className='card border-primary m-3'>
+      return  <div key={item.pk} className='card border-primary grid-item m-3'>
                   <div className='card-header'>{item.title}</div>
                   <div className='card-body'>
                     <button className='button-submit-form' onClick={() => deleteTag(item.pk)}>Удалить</button>
@@ -71,7 +71,7 @@ const TagsList = () => {
         {access?
         <div>
             <h2>Ваши теги</h2>
-            <div className='d-flex'>
+            <div className='grid'>
                 {tagsParse}
             </div>
         </div>

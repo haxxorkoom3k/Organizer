@@ -11,6 +11,7 @@ from authorization.serializers import UserSerializer, CreateUserSerializer, Note
 from rest_framework.generics import CreateAPIView, DestroyAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework import generics, status
+from rest_framework.views import APIView
 from .models import Notes, Tags, ToDo, ToDo_tags, Spend, SpendTags
 from rest_framework import filters
 from rest_framework.filters import SearchFilter
@@ -50,10 +51,11 @@ class UserAPI(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
     
-@api_view(['POST'])
-def logout(request):
-    logout(request)
-    return Response(status=status.HTTP_200_OK)
+class LogoutAPIView(APIView):
+    def post(self, request):
+        request.session.flush()
+
+        return Response(status=status.HTTP_200_OK)
 
 @permission_classes([IsAuthenticated])
 @authentication_classes([JWTAuthentication])
@@ -307,7 +309,7 @@ class NoteSearch(generics.ListAPIView):
         queryset = Notes.objects.filter(owner=self.request.user)
         search_query = self.request.query_params.get('search', None)
         if search_query is not None:
-            queryset = queryset.filter(Q(title__iexact=search_query) | Q(tag__iexact=search_query))
+            queryset = queryset.filter(Q(title__icontains=search_query) | Q(tag__icontains=search_query))
         return queryset
     
 @permission_classes([IsAuthenticated])
@@ -335,5 +337,5 @@ class SpendSearch(generics.ListAPIView):
         queryset = Spend.objects.filter(owner=self.request.user)
         search_query = self.request.query_params.get('search', None)
         if search_query is not None:
-            queryset = queryset.filter(Q(title__iexact=search_query) | Q(tag__iexact=search_query))
+            queryset = queryset.filter(Q(title__icontains=search_query) | Q(tag__icontains=search_query))
         return queryset

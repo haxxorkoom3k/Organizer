@@ -60,7 +60,7 @@ const Spend = () => {
     console.log(spendMoney)
 
     let spendList = spendData.map(function(item) {
-        return <div key={item.pk} className="card border-secondary m-3">
+        return <div key={item.pk} className="card border-secondary m-3 grid-item">
                     <Link className="card-header noteTitle" to={`/user/spend/${item.pk}`}>{item.title}</Link>
                     <div className="card-body">
                       <h4 className="card-title">{item.amount} &#x20bd;</h4>
@@ -74,7 +74,7 @@ const Spend = () => {
         {access?
         <div className='notelist'>
             <h2>Потрачено: {spendMoney.total_spent} &#x20bd; <Link className='myButton' to={'/user/spend/create'}>Добавить запись</Link></h2>
-            <div className='d-flex'>
+            <div className='grid'>
                 {spendList}
             </div>
         </div>

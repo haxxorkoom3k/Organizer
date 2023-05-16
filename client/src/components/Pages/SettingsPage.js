@@ -18,7 +18,7 @@ const SettingsPage = () => {
           </div>
         </div>
         <div className='settings-tags alert m-2'>
-          <h2>Раздел тегов (ToDo)</h2>
+          <h2>Раздел тегов (Задачи)</h2>
           <p className='text-muted'>Здесь вы можете просмотреть и создать теги</p>
           <div className='st pt-4'>
             <Link className='myButton' to='/user/create-todotag'>Новый тег</Link>

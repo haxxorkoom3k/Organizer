@@ -138,7 +138,7 @@ const UserProfile = () => {
             <h1>Добро пожаловать, {username}!</h1>
             <p>Дата регистрации {dateJoined}</p>
             <p>Email: {email}</p>
-            <button onClick={handleLogout}>Тестовый выход</button>
+            <button className='formButton' onClick={handleLogout}>Выход</button>
             </div>
             <div>
               <h5><NoteSVG/> Количество заметок: {notes.length}</h5>

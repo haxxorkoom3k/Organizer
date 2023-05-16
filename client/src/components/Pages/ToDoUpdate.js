@@ -5,10 +5,10 @@ const ToDoUpdate = () => {
 
     const [ access ] = useState(localStorage.getItem('accessToken'))
     const [ todo, setToDo ] = useState([])
-    const [ title, setTitle ] = useState('')
+    let [ title, setTitle ] = useState('')
     const [ tags, setTags ] = useState([])
-    const [ todoTag, setToDoTag ] = useState('')
-    const [ complete, setComplete ] = useState('')
+    let [ todoTag, setToDoTag ] = useState('')
+    let [ complete, setComplete ] = useState('')
     const { id } = useParams()
 
     const getToDo = (id) => {
@@ -28,8 +28,10 @@ const ToDoUpdate = () => {
                 throw Error(`ошибка! ${response.status}`)
             }
         }).then(data => {
+            console.log(data)
             setToDo(data)
             setTitle(data.title)
+            setToDoTag(data.tag)
         })
     }
 
@@ -67,8 +69,6 @@ const ToDoUpdate = () => {
             tagsFetch()
         }
     }, [access])
-
-    // console.log(todoTag)
 
     let tagParse = tags.map(function(item) {
         return <option key={item.pk}>{item.title}</option>
@@ -112,10 +112,12 @@ const ToDoUpdate = () => {
         <form className='alert m-3' onSubmit={submitHandler}>
             <h2>Обновление ToDo</h2>
             <input className='form-control mb-1' defaultValue={title} onChange={e => setTitle(e.target.value)} type='text' name='title' placeholder='Название' />
-            <select className='form-select mb-2' onChange={selectHandler}>
+            <select className='form-select mb-2' defaultValue={todo.tag} onChange={selectHandler}>
+                <option></option>
                 {tagParse}
             </select>
-            <select name='todo-complete' className='form-select mb-2' onChange={e => setComplete(e.target.value)}>
+            <select name='todo-complete' defaultValue={todo.complete} className='form-select mb-2' onChange={e => setComplete(e.target.value)}>
+                <option value={''}>Выберите статус выполнения</option>
                 <option value={'Да'}>Да</option>
                 <option value={'Нет'}>Нет</option>
             </select>

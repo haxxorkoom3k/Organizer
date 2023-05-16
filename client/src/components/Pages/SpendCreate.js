@@ -78,6 +78,7 @@ const SpendCreate = () => {
           <input className='form-control mb-1' type='text' name='title' onChange={e => setTitle(e.target.value)} placeholder='Название' required />
           <input className='form-control mb-1' type='number' name='amount' onChange={e => setAmount(e.target.value)} placeholder='Цена' required />
           <select className='form-select mb-2' onChange={selectHandler}>
+            <option></option>
             {tagParse}
           </select>
           <input className='w50p form-control' type="submit" name="submit" value="Создать запись" />

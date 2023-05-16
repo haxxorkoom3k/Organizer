@@ -69,7 +69,7 @@ const NavBar = () => {
               <Link to='user/search'><SearchSVG />Поиск</Link>
               <Link to='user/note'><NoteSVG />Заметки</Link>
               <Link to='user/spend'><WalletSVG />Покупки</Link>
-              <Link to='user/todo-list'><ToDoSVG />To-Do</Link>
+              <Link to='user/todo-list'><ToDoSVG />Задачи</Link>
               <Link to='/user/profile'><AccountSVG /> Привет, {username}</Link>
               <Link to='user/settings' ><SettingsSVG />Настройки</Link>
             </div>

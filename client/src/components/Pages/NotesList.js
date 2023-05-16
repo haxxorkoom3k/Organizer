@@ -57,7 +57,7 @@ const NotesList = () => {
     }
 
     let NoteParse = notes.map(function(item) {
-        return <div key={item.pk} className='card border-primary m-3'>
+        return <div key={item.pk} className='card border-primary m-3 grid-item'>
                 <Link className='card-header noteTitle' to={`/user/note/${item.pk}`}>{item.title}</Link>
                 <div className='card-body'>
                   <h4 className='card-title'>{item.body}</h4>
@@ -72,7 +72,7 @@ const NotesList = () => {
             {access?
             <div className='notelist'>
                 <h2>Количество заметок: {notes.length} <Link className='myButton' to='/user/create-note'>Добавить ещё</Link></h2>
-                <div className='displayRecords'>
+                <div className='grid'>
                     {NoteParse}
                 </div>
             </div>

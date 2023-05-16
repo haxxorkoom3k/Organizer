@@ -17,6 +17,7 @@ const SearchPage = () => {
 
     const SearchHandler = () => {
         if (note.checked) {
+            setLoading(true)
             fetch(
                 `/api/search/note/?search=${searchTerm}`,
                 {
@@ -33,9 +34,10 @@ const SearchPage = () => {
                     }
                 }).then(data => {
                     setRecords(data)
-            })
+            }).finally(setLoading(false))
         }
         if (todo.checked) {
+            setLoading(true)
             fetch(
                 `/api/search/todo/?search=${searchTerm}`,
                 {
@@ -52,9 +54,10 @@ const SearchPage = () => {
                     }
                 }).then(data => {
                     setRecords(data)
-            })
+            }).finally(setLoading(false))
         }
         if (spend.checked) {
+            setLoading(true)
             fetch(
                 `/api/search/spend/?search=${searchTerm}`,
                 {
@@ -71,7 +74,7 @@ const SearchPage = () => {
                     }
                 }).then(data => {
                     setRecords(data)
-            })
+            }).finally(setLoading(false))
         }
     }
 
@@ -82,7 +85,7 @@ const SearchPage = () => {
                     <div className='card-header noteTitle'>{item.title}</div>
                     <div className='card-body'>
                       <h4 className='card-title'>{item.body}</h4>
-                      <h5>{item.owner}</h5>
+                      <h5>{item.tag}</h5>
                     </div>
                 </div>
     })
@@ -93,8 +96,8 @@ const SearchPage = () => {
 
   return (
     <div>
-        <div>
-            <div className='alert m-3'>
+        <div className='search-wrapper'>
+            <div className='searchForm alert m-3'>
                 <div className='d-flex searchSelect'>
                     <div className='radio-btn-style'>
                         <input type="radio" name="radio" id='radio-1' />
@@ -112,13 +115,21 @@ const SearchPage = () => {
                     </div>
 
                 </div>
-                <input type='text' placeholder='Введите название или тэг записи' value={searchTerm} onChange={handleSearchInput} />
-                <button type='submit' onClick={SearchHandler}>Поиск</button>
+                <input type='text' className='searchInput' placeholder='Введите название или тэг записи' value={searchTerm} onChange={handleSearchInput} />
+                <button type='submit' className='searchButton' onClick={SearchHandler}>Поиск</button>
             </div>
         </div>
-        <div>
-            {record}
-        </div>
+        {loading?
+            <div>
+                <h2>Загрузка..</h2>
+            </div>
+        :
+            <div className='search-records-wrapper'>
+                <div className='search-records'>
+                    {record}
+                </div>
+            </div>
+        }
     </div>
   )
 }
