@@ -1,4 +1,5 @@
 import React, { UseState, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const SpendCreate = () => {
 
@@ -8,6 +9,7 @@ const SpendCreate = () => {
     const [ amount, setAmount ] = useState()
     const [ tags, setTags ] = useState([])
     const [ tag, setTag ] = useState('')
+    const Navigate = useNavigate()
 
     const submitHandler = (e) => {
         e.preventDefault()
@@ -32,7 +34,7 @@ const SpendCreate = () => {
             }).catch(error => {
                console.log(error)
                alert(`ошибка. ${error}`)
-            })
+            }).finally(alert("запись создана."))
     }
 
     const tagFetch = async () => {
@@ -71,14 +73,20 @@ const SpendCreate = () => {
         return <option key={item.pk}>{item.title}</option>
       })
 
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          Navigate("/user/spend")
+        }
+      });
+
   return (
-    <div className='alert'>
+    <div className='ItemCreateWrapper'>
         <form className='NoteCreateForm alert m-3' onSubmit={submitHandler}>
           <h2>Новая запись</h2>
           <input className='form-control mb-1' type='text' name='title' onChange={e => setTitle(e.target.value)} placeholder='Название' required />
           <input className='form-control mb-1' type='number' name='amount' onChange={e => setAmount(e.target.value)} placeholder='Цена' required />
           <select className='form-select mb-2' onChange={selectHandler}>
-            <option></option>
+            <option>Выберите тег</option>
             {tagParse}
           </select>
           <input className='w50p form-control' type="submit" name="submit" value="Создать запись" />

@@ -87,7 +87,7 @@ const ToDoList = () => {
     <div>
       {access?
         <div className='m-3'>
-          <h2>Количество задач: {toDo.length} <Link className='myButton' to='/user/create-todo'>Добавить новую</Link></h2>
+          <h2 className='mobile-info'>Количество задач: {toDo.length} <Link className='myButton mobile-button' to='/user/create-todo'>Добавить новую</Link></h2>
           <h3 className='mt-3'>Выполнено: {completed}</h3>
           <div className='grid'>
               {completedTasks}

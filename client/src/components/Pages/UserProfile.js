@@ -128,6 +128,8 @@ const UserProfile = () => {
       }
     }, [access])
 
+
+
     return (
     <div>
       {error? <p>{error}</p> : null}
@@ -135,8 +137,8 @@ const UserProfile = () => {
         <div className='userprof-wrapper'>
           <div className='alert m-3 infoblock'>
             <div>
-            <h1>Добро пожаловать, {username}!</h1>
-            <p>Дата регистрации {dateJoined}</p>
+            <h1>Рады видеть, {username}!</h1>
+            <p>Дата регистрации {dateJoined.substring(0, 10)}</p>
             <p>Email: {email}</p>
             <button className='formButton' onClick={handleLogout}>Выход</button>
             </div>

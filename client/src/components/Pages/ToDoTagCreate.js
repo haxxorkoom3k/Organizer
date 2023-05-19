@@ -25,13 +25,13 @@ const ToDoTagCreate = () => {
             } else {
                 alert(`ошибка ${response.status}`)
             }
-        })
+        }).finally(alert("запись создана."))
     }
 
   return (
-    <div className='alert'>
-        <form className='form-control create-tags' onSubmit={submitHandler}>
-            <h2>Новый тег (ToDo)</h2>
+    <div className='ItemCreateWrapper mt-2'>
+        <form className='alert form-control create-tags' onSubmit={submitHandler}>
+            <h2>Новый тег (Задачи)</h2>
             <input type='text' name='titleLabel' className='form-control m-1' onChange={e => setTitleLabel(e.target.value)} placeholder='Название тега' required />
             <input className='w50p form-control' type="submit" name="submit" value="Создать тег" />
         </form>

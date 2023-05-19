@@ -15,7 +15,14 @@ const SearchPage = () => {
     const todo = document.querySelector('#radio-2')
     const spend = document.querySelector('#radio-3')
 
+    const input_track = document.querySelector('#search_input')
+
     const SearchHandler = () => {
+
+        if (input_track === '') {
+            alert("Введён пустой запрос.")
+        }
+
         if (note.checked) {
             setLoading(true)
             fetch(
@@ -78,8 +85,6 @@ const SearchPage = () => {
         }
     }
 
-    
-
     let record = records.map(function(item) {
         return  <div key={item.pk} className='card border-primary m-3'>
                     <div className='card-header noteTitle'>{item.title}</div>
@@ -115,7 +120,7 @@ const SearchPage = () => {
                     </div>
 
                 </div>
-                <input type='text' className='searchInput' placeholder='Введите название или тэг записи' value={searchTerm} onChange={handleSearchInput} />
+                <input type='text' id='search_input' className='searchInput' placeholder='Введите название или тэг записи' value={searchTerm} onChange={handleSearchInput} />
                 <button type='submit' className='searchButton' onClick={SearchHandler}>Поиск</button>
             </div>
         </div>

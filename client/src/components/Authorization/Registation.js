@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Navigate, useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 const Registation = () => {
 
@@ -39,7 +39,7 @@ const Registation = () => {
               .catch(error => {
                console.log(error)
                alert(`ошибка. ${error}`)
-             })
+             }).finally(Navigate("/user/login"))
 
     }
 

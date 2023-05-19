@@ -73,7 +73,7 @@ const Spend = () => {
     <div>
         {access?
         <div className='notelist'>
-            <h2>Потрачено: {spendMoney.total_spent} &#x20bd; <Link className='myButton' to={'/user/spend/create'}>Добавить запись</Link></h2>
+            <h2 className='mobile-info'>Потрачено: {spendMoney.total_spent} &#x20bd; <Link className='myButton' to={'/user/spend/create'}>Добавить запись</Link></h2>
             <div className='grid'>
                 {spendList}
             </div>

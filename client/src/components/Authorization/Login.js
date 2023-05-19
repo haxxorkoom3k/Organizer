@@ -130,7 +130,7 @@ const Login = () => {
                   <input className='rlstyle' type="password" name="password" value={formPassword} onChange={e => setFormPassword(e.target.value)} placeholder="Password" required />
 
                 <input type="submit" name="submit" value="Войти"/>
-                <Link to='/user/register'>Нет аккаунта?</Link>
+                <Link to='/user/register'>Нет аккаунта? Регистрация</Link>
               </form>
             </div>
             :

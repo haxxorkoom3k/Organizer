@@ -29,8 +29,8 @@ const CreateTag = () => {
     }
 
   return (
-    <div className='alert'>
-        <form className='form-control create-tags' onSubmit={submitHandler}>
+    <div className='ItemCreateWrapper mt-2'>
+        <form className='alert form-control create-tags' onSubmit={submitHandler}>
             <h2>Новый тег</h2>
             <input type='text' name='titleLabel' className='form-control m-1' onChange={e => setTitleLabel(e.target.value)} placeholder='Название тега' required />
             <input className='w50p form-control' type="submit" name="submit" value="Создать тег" />

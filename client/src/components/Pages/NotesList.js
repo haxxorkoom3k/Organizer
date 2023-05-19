@@ -71,7 +71,7 @@ const NotesList = () => {
         <div>
             {access?
             <div className='notelist'>
-                <h2>Количество заметок: {notes.length} <Link className='myButton' to='/user/create-note'>Добавить ещё</Link></h2>
+                <h2 className='mobile-info'>Количество заметок: {notes.length} <Link className='myButton' to='/user/create-note'>Добавить ещё</Link></h2>
                 <div className='grid'>
                     {NoteParse}
                 </div>

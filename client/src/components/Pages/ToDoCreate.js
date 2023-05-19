@@ -68,19 +68,19 @@ const ToDoCreate = () => {
       }).catch(error => {
          console.log(error)
          alert(`ошибка. ${error}`)
-    })
+    }).finally(alert("Запись создана."))
   }
 
   return (
-    <div className='alert'>
+    <div className='ItemCreateWrapper'>
         <form className='NoteCreateForm alert m-3' onSubmit={submitHandler}>
           <h2>Новый ToDo</h2>
           <input className='form-control mb-1' type='text' name='title' onChange={e => setFormTitle(e.target.value)} placeholder='Название' required />
           <select className='form-select mb-2' onChange={selectHandler}>
-            <option> </option>
+            <option>Выберите тег</option>
             {tagParse}
           </select>
-          <input className='w50p form-control' type="submit" name="submit" value="Создать ToDo" />
+          <input className='w50p form-control' type="submit" name="submit" value="Создать задачу" />
         </form>
     </div>
   )

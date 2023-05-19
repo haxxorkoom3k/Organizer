@@ -33,7 +33,7 @@
 }
 
 .navLinksStyle {
-    width: 50%;
+    width: 40%;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -73,7 +73,7 @@
 
 .infoblock {
     display: flex;
-    width: 100%;
+    width: 50%;
     justify-content: space-around;
 }
 
@@ -81,7 +81,7 @@
     fill: white;
 }
 
-.NoteCreateWrapper {
+.ItemCreateWrapper {
     width: 100%;
     height: 80%;
     display: flex;
@@ -261,7 +261,7 @@
     width: 30%;
 }
 
-.exitButton {
+.formButton {
     padding: 1%;
     width: 20%;
     background: white;
@@ -308,9 +308,30 @@
     border: none;
 }
 
-@media (min-width: 767px) {
-    .myFontSize {
-        font-size: calc(var(--calc_size) * .8);
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #1f1f1f;
+    border-radius: 10px 0 0 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #666;
+    border-radius: 10px 0 0 10px;
+}
+
+.create-tags {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 500px) {
+    .mobile-size {
+        font-size: calc(var(--calc-size) * .9);
     }
     
     .myLinkStyle {
@@ -340,7 +361,7 @@
     }
     
     .navLinksStyle {
-        width: 90%;
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-around;
@@ -351,7 +372,7 @@
         fill: white;
         display: flex;
         align-items: center;
-        font-size: calc(var(--calc_size) * .45);
+        font-size: calc(var(--calc_size) * .6);
     }
     
     .navLinksStyle > a:hover {
@@ -380,17 +401,19 @@
     
     .infoblock {
         display: flex;
-        width: 50%;
+        flex-direction: column;
+        width: 100%;
         justify-content: space-around;
     }
     
     .infoblock > div:last-child {
+        margin-top: 2%;
         fill: white;
     }
     
-    .NoteCreateWrapper {
+    .ItemCreateWrapper {
         width: 100%;
-        height: 80%;
+        height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -398,7 +421,7 @@
     }
     
     .NoteCreateForm {
-        width: 50%;
+        width: 90%;
         height: 50%;
         display: flex;
         flex-direction: column;
@@ -415,13 +438,14 @@
     }
     
     .settings-tags {
-        width: 80%;
+        width: 90%;
         justify-content: space-between;
         display: flex;
+        flex-direction: column;
     }
     
     .st {
-        width: 20%;
+        width: 100%;
         display: flex;
         flex-direction: row;
         justify-content: space-around;
@@ -433,14 +457,18 @@
         padding-bottom: 20px;
     }
     
-    .myButton {
+    .mobile-info {
+        font-size: calc(var(--calc_size) * 1.2);
+    }
+
+    .mobile-button {
         border-radius: 12px;
         padding: 5px;
         background: #525252;
         text-decoration: none;
     }
     
-    .myButton:hover {
+    .mobile-button:hover {
         background: #333333;
         box-shadow: 7px 7px 16px 0px rgba(99, 49, 90, 0.6);
         transition: all .4s;
@@ -543,5 +571,17 @@
     
     .grid-item {
         flex-basis: calc(33.33% - 20px);
+    }
+
+    .searchForm {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .searchInput {
+        margin-top: 1%;
+        width: 80%;
     }
   }

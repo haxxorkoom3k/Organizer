@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const NoteCreate = () => {
 
@@ -7,6 +8,8 @@ const NoteCreate = () => {
     const [ fTag, setFTag ] = useState([])
     const [ noteTag, setNoteTag ] = useState('')
     const [ access ] = useState(localStorage.getItem('accessToken'))
+
+    const Navigate = useNavigate()
     
     const tagsFetch = async () => {
       await fetch(
@@ -67,18 +70,23 @@ const NoteCreate = () => {
         }).catch(error => {
            console.log(error)
            alert(`ошибка. ${error}`)
-      })
+      }).finally(alert("запись создана."))
     }
     
-
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          Navigate("/user/note")
+        }
+      })
+      
   return (
-    <div className='NoteCreateWrapper'>
+    <div className='ItemCreateWrapper'>
         <form className='NoteCreateForm alert m-3' onSubmit={submitHandler}>
           <h2>Новая заметка</h2>
           <input className='form-control mb-1' type='text' name='title' onChange={e => setFormTitle(e.target.value)} placeholder='Название' required />
           <textarea className='form-control m-1' onChange={e => setFormNote(e.target.value)} placeholder='Текст заметки' rows={10} cols={20}/>
           <select className='form-select mb-2' onChange={selectHandler}>
-            <option></option>
+            <option>Выберите тег</option>
             {tagParse}
           </select>
           <input className='w50p form-control' type="submit" name="submit" value="Сохранить заметку" />
