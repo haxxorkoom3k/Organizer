@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Navigate, useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 const Registation = () => {
 
@@ -39,12 +39,9 @@ const Registation = () => {
               .catch(error => {
                console.log(error)
                alert(`ошибка. ${error}`)
-             })
+             }).finally(Navigate("/user/login"))
 
     }
-  
-
-
 
     return (
     <div>
@@ -52,16 +49,17 @@ const Registation = () => {
         <div className='form-wrapper'>
             <form className="registerForm alert" onSubmit={submitHandler}>
                 <h2>Регистрация</h2>
+                <hr />
                 <label htmlFor='username'>Логин: </label>
-                <input type="text" name="username" value={formUsername} onChange={e => setFormUsername(e.target.value)} placeholder="Username" requred/>
+                <input className='rlstyle' type="text" name="username" value={formUsername} onChange={e => setFormUsername(e.target.value)} placeholder="Username" requred/>
                 
                 <label htmlFor='email'>Email: </label>
-                <input type="email" name="email" value={formEmail} onChange={e => setFormEmail(e.target.value)} placeholder="Email" requred/>
-
-                <label htmlFor='password'>Пароль</label>
-                <input type="password" name="password" value={formPassword} onChange={e => setFormPassword(e.target.value)} placeholder="Password" requred/>
+                <input className='rlstyle' type="email" name="email" value={formEmail} onChange={e => setFormEmail(e.target.value)} placeholder="Email" requred/>
                 
-                <input type="submit" name="submit" value="Регистрация"/>
+                <label htmlFor='password'>Пароль</label>
+                <input className='rlstyle' type="password" name="password" value={formPassword} onChange={e => setFormPassword(e.target.value)} placeholder="Password" requred/>
+
+                <input  type="submit" name="submit" value="Регистрация"/>
                 <Link to='/user/login'>Есть аккаунт?</Link>
             </form>
         </div>

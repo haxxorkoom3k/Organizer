@@ -2,13 +2,13 @@ from rest_framework.serializers import ModelSerializer, Serializer, CharField
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from authorization.models import Notes, Tags, ToDo, ToDo_tags
+from authorization.models import Notes, Tags, ToDo, ToDo_tags, Spend, SpendTags
 from rest_framework import request
 
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'date_joined']
+        fields = ['id', 'username', 'email', 'date_joined']
 
         
 class CreateUserSerializer(ModelSerializer):
@@ -55,9 +55,33 @@ class ToDoSerializer(ModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), default=serializers.CurrentUserDefault())
     class Meta:
         model = ToDo
-        fields = ['pk', 'owner', 'tag', 'completed', 'update', 'created']
+        fields = ['pk', 'owner', 'title', 'tag', 'completed', 'update', 'created']
 
 class ToDoTagsSerializer(ModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), default=serializers.CurrentUserDefault())
     class Meta:
         model = ToDo_tags
-        fields = ['pk', 'title']
+        fields = ['pk', 'owner', 'title']
+
+class SpendSerializer(ModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), default=serializers.CurrentUserDefault())
+    class Meta:
+        model = Spend
+        fields = ['pk', 'owner', 'title', 'amount', 'tag', 'date']
+
+class SpendTagsSerializer(ModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), default=serializers.CurrentUserDefault())
+    class Meta:
+        model = SpendTags
+        fields = ['pk', 'owner', 'title']
+
+class SearchSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField(max_length=100)
+    type = serializers.CharField()
+    
+    def to_representation(self, instance):
+        record_type = instance.__class__.__name__.lower()
+        data = super().to_representation(instance)
+        data['type'] = record_type
+        return data

@@ -3,12 +3,12 @@ import React, {useState, useEffect} from 'react'
 const ToDoCreate = () => {
 
   const [ formTitle, setFormTitle ] = useState('')
-  const [ cTag, setCTag ] = useState([])
+  const [ tags, setTags ] = useState([])
   const [ todoTag, setToDoTag ] = useState('')
   const [ access ] = useState(localStorage.getItem('accessToken'))
 
 
-  const completeFetch = async () => {
+  const tagFetch = async () => {
     await fetch(
       '/api/get-todotags',
       {
@@ -26,22 +26,27 @@ const ToDoCreate = () => {
         throw Error(`Что-то пошло не так: код ${response.status}`)
        }
       }).then(data => {
-        setCTag(data)
+        setTags(data)
       })
     }
         
     useEffect(() => {
       if (access) {
-          completeFetch()
+          tagFetch()
       }
     }, [access])
   
-    let tagParse = cTag.map(function(item){
+    let tagParse = tags.map(function(item){
       return <option key={item.pk}>{item.title}</option>
     })
   
   const selectHandler = (e) => {
-    setCTag(e.target.value)
+    setToDoTag(e.target.value)
+  }
+
+  const new_data = {
+    title: formTitle,
+    tag: todoTag,
   }
 
   const submitHandler = (e) => {
@@ -55,23 +60,28 @@ const ToDoCreate = () => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${access}`,
         },
-        body: JSON.stringify({
-          title: formTitle,
-          completed: todoTag,
-      })
+        body: JSON.stringify(new_data)
       }).then(response => {
           if (response.ok) {
-             console.log("response point 1 ok")
+             console.log("response point 2 ok")
           }
       }).catch(error => {
          console.log(error)
          alert(`ошибка. ${error}`)
-    })
+    }).finally(alert("Запись создана."))
   }
 
   return (
-    <div>
-        скоро здесь будет todo
+    <div className='ItemCreateWrapper'>
+        <form className='NoteCreateForm alert m-3' onSubmit={submitHandler}>
+          <h2>Новый ToDo</h2>
+          <input className='form-control mb-1' type='text' name='title' onChange={e => setFormTitle(e.target.value)} placeholder='Название' required />
+          <select className='form-select mb-2' onChange={selectHandler}>
+            <option>Выберите тег</option>
+            {tagParse}
+          </select>
+          <input className='w50p form-control' type="submit" name="submit" value="Создать задачу" />
+        </form>
     </div>
   )
 }

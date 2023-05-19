@@ -34,19 +34,44 @@ const TagsList = () => {
             tagsFetch()
         }
     }, [access])
-  
-      let tagsParse = tags.map(function(item) {
-        return  <div key={item.pk} className='card border-primary m-3'>
-                    <div className='card-header'>{item.title}</div>
-                </div>
+    
+    let deleteTag = (id) => {
+      fetch(
+          `/api/delete-notetag/${id}`,
+          {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json;charset=utf-8',
+                  'Authorization': `Bearer ${access}`,
+              }
+          }
+      ).then((response) => {
+          if (response.ok) {
+              console.log(`удаление тега todo с ${response.status}`)
+              window.location.reload()
+          } else {
+              throw Error(`ошибка! ${response.status}`)
+          }
+      }).catch(error => {
+          console.log(`ошибка! ${error}`)
       })
+  }
+
+    let tagsParse = tags.map(function(item) {
+      return  <div key={item.pk} className='card border-primary grid-item m-3'>
+                  <div className='card-header'>{item.title}</div>
+                  <div className='card-body'>
+                    <button className='button-submit-form' onClick={() => deleteTag(item.pk)}>Удалить</button>
+                  </div>
+              </div>
+    })
 
   return (
     <div>
         {access?
         <div>
             <h2>Ваши теги</h2>
-            <div className='d-flex'>
+            <div className='grid'>
                 {tagsParse}
             </div>
         </div>

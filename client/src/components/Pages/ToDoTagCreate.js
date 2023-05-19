@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, {useState, useEffect} from 'react'
 
-const CreateTag = () => {
+const ToDoTagCreate = () => {
 
     const [ titleLabel, setTitleLabel ] = useState('')
     const [ access ] = useState(localStorage.getItem('accessToken'))
@@ -9,7 +9,7 @@ const CreateTag = () => {
         e.preventDefault()
 
         fetch(
-            '/api/new-tag',
+            '/api/tag-todo-create',
             {
                 method: 'POST',
                 headers: {
@@ -25,13 +25,13 @@ const CreateTag = () => {
             } else {
                 alert(`ошибка ${response.status}`)
             }
-        })
+        }).finally(alert("запись создана."))
     }
 
   return (
     <div className='ItemCreateWrapper mt-2'>
         <form className='alert form-control create-tags' onSubmit={submitHandler}>
-            <h2>Новый тег</h2>
+            <h2>Новый тег (Задачи)</h2>
             <input type='text' name='titleLabel' className='form-control m-1' onChange={e => setTitleLabel(e.target.value)} placeholder='Название тега' required />
             <input className='w50p form-control' type="submit" name="submit" value="Создать тег" />
         </form>
@@ -39,4 +39,4 @@ const CreateTag = () => {
   )
 }
 
-export default CreateTag
+export default ToDoTagCreate
