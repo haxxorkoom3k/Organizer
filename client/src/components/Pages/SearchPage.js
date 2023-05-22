@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 const SearchPage = () => {
 
@@ -6,6 +7,7 @@ const SearchPage = () => {
     const [ records, setRecords ] = useState([])
     const [ searchTerm, setSearchTerm ] = useState('')
     const [ loading, setLoading ] = useState()
+    let [ record, setRecord ] = useState([])
 
     const handleSearchInput = (e) => {
         setSearchTerm(e.target.value)
@@ -15,88 +17,101 @@ const SearchPage = () => {
     const todo = document.querySelector('#radio-2')
     const spend = document.querySelector('#radio-3')
 
-    const input_track = document.querySelector('#search_input')
-
     const SearchHandler = () => {
 
-        if (input_track === '') {
-            alert("Введён пустой запрос.")
-        }
+        if (searchTerm === '') {
+            alert("Введён пустой запрос")
+        } else {
 
-        if (note.checked) {
-            setLoading(true)
-            fetch(
-                `/api/search/note/?search=${searchTerm}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': `Bearer ${access}`,
-                    },
-                }).then(response => {
-                    if (response.ok) {
-                        return response.json()
-                    } else {
-                        throw Error(`Что-то пошло не так: код ${response.status}`)
-                    }
-                }).then(data => {
-                    setRecords(data)
-            }).finally(setLoading(false))
-        }
-        if (todo.checked) {
-            setLoading(true)
-            fetch(
-                `/api/search/todo/?search=${searchTerm}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': `Bearer ${access}`,
-                    },
-                }).then(response => {
-                    if (response.ok) {
-                        return response.json()
-                    } else {
-                        throw Error(`Что-то пошло не так: код ${response.status}`)
-                    }
-                }).then(data => {
-                    setRecords(data)
-            }).finally(setLoading(false))
-        }
-        if (spend.checked) {
-            setLoading(true)
-            fetch(
-                `/api/search/spend/?search=${searchTerm}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': `Bearer ${access}`,
-                    },
-                }).then(response => {
-                    if (response.ok) {
-                        return response.json()
-                    } else {
-                        throw Error(`Что-то пошло не так: код ${response.status}`)
-                    }
-                }).then(data => {
-                    setRecords(data)
-            }).finally(setLoading(false))
+            if (note.checked) {
+                setLoading(true)
+                fetch(
+                    `/api/search/note/?search=${searchTerm}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Authorization': `Bearer ${access}`,
+                        },
+                    }).then(response => {
+                        if (response.ok) {
+                            return response.json()
+                        } else {
+                            throw Error(`Что-то пошло не так: код ${response.status}`)
+                        }
+                    }).then(data => {
+                        setRecord(data.map(function(item) {
+                            return  <div key={item.pk} className='card border-primary m-3'>
+                                        <Link to={`/user/note/${item.pk}`} className='card-header noteTitle'>{item.title}</Link>
+                                        <div className='card-body'>
+                                          <h4 className='card-title'>{item.body}</h4>
+                                          <h5>{item.tag}</h5>
+                                        </div>
+                                    </div>
+                    }))
+
+                }).finally(setLoading(false))
+            }
+            if (todo.checked) {
+                setLoading(true)
+                fetch(
+                    `/api/search/todo/?search=${searchTerm}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Authorization': `Bearer ${access}`,
+                        },
+                    }).then(response => {
+                        if (response.ok) {
+                            return response.json()
+                        } else {
+                            throw Error(`Что-то пошло не так: код ${response.status}`)
+                        }
+                    }).then(data => {
+                        setRecord(data.map(function(item) {
+                            return  <div key={item.pk} className='card border-primary m-3'>
+                                        <Link to={`/user/todo/${item.pk}`} className='card-header noteTitle'>{item.title}</Link>
+                                        <div className='card-body'>
+                                          <h4 className='card-title'>{item.body}</h4>
+                                          <h5>{item.tag}</h5>
+                                        </div>
+                                    </div>
+                    }))
+
+                }).finally(setLoading(false))
+            }
+            if (spend.checked) {
+                setLoading(true)
+                fetch(
+                    `/api/search/spend/?search=${searchTerm}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Authorization': `Bearer ${access}`,
+                        },
+                    }).then(response => {
+                        if (response.ok) {
+                            return response.json()
+                        } else {
+                            throw Error(`Что-то пошло не так: код ${response.status}`)
+                        }
+                    }).then(data => {
+                        setRecord(data.map(function(item) {
+                            return  <div key={item.pk} className='card border-primary m-3'>
+                                        <Link to={`/user/spend/${item.pk}`} className='card-header noteTitle'>{item.title}</Link>
+                                        <div className='card-body'>
+                                          <h4 className='card-title'>{item.body}</h4>
+                                          <h5>{item.tag}</h5>
+                                        </div>
+                                    </div>
+                    }))
+                }).finally(setLoading(false))
+            }
         }
     }
 
-    let record = records.map(function(item) {
-        return  <div key={item.pk} className='card border-primary m-3'>
-                    <div className='card-header noteTitle'>{item.title}</div>
-                    <div className='card-body'>
-                      <h4 className='card-title'>{item.body}</h4>
-                      <h5>{item.tag}</h5>
-                    </div>
-                </div>
-    })
-
-    console.log(records)
-    console.log(searchTerm)
 
 
   return (
@@ -120,7 +135,7 @@ const SearchPage = () => {
                     </div>
 
                 </div>
-                <input type='text' id='search_input' className='searchInput' placeholder='Введите название или тэг записи' value={searchTerm} onChange={handleSearchInput} />
+                <input type='text' id='search_input' className='searchInput' placeholder='Введите название или тег записи' value={searchTerm} onChange={handleSearchInput} />
                 <button type='submit' className='searchButton' onClick={SearchHandler}>Поиск</button>
             </div>
         </div>
