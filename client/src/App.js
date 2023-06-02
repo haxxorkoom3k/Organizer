@@ -45,7 +45,7 @@ function App() {
           <Route exact path='user/note-tagslist' element={<TagsList />} />
           <Route exact path='user/create-todotag' element={<ToDoTagCreate />} />
           <Route exact path='user/create-todo' element={<ToDoCreate />} />
-          <Route exact path='user/todo-list' element={<ToDoList />} />
+          <Route exact path='user/todo' element={<ToDoList />} />
           <Route exact path='user/todo-tagslist' element={<ToDoTagsList />} />
           <Route exact path='user/todo/:id' element={<ToDoUpdate />} />
           <Route exact path='user/spend/' element={<Spend />} />

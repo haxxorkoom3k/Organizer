@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, renderer_classes
@@ -7,7 +7,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from authorization.serializers import UserSerializer, CreateUserSerializer, NoteSerializer, TagsSerializer, ToDoSerializer, ToDoTagsSerializer, SpendSerializer, SpendTagsSerializer, SearchSerializer
+from authorization.serializers import *
 from rest_framework.generics import CreateAPIView, DestroyAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -56,6 +56,23 @@ class LogoutAPIView(APIView):
         request.session.flush()
 
         return Response(status=status.HTTP_200_OK)
+
+# не работает
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+class ChangePasswordView(APIView):
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            user = authenticate(username=request.user.username, password=serializer.validated_data['old_password'])
+            if user is not None:
+                user.set_password(serializer.validated_data['new_password'])
+                user.save()
+                return Response({"message": "Пароль успешно изменен"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "Старый пароль неверный"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @permission_classes([IsAuthenticated])
 @authentication_classes([JWTAuthentication])

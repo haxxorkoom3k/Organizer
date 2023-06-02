@@ -22,6 +22,7 @@ class Tags(models.Model):
 
 class Notes(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_pinned = models.BooleanField(default=False)
     title = models.CharField(max_length=50, null=True, blank=True)
     body = models.TextField(blank=True, null=True)
     tag = models.CharField(max_length=20, blank=True, null=True)
@@ -48,7 +49,7 @@ class ToDo_tags(models.Model):
     title = models.CharField(max_length=15)
 
     def __str__(self):
-        return f'{self.username} - {self.title}'
+        return f'{self.owner} - {self.title}'
     
 class Spend(models.Model):
 

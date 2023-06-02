@@ -125,7 +125,15 @@
     align-items: center;
 }
 
-.notelist > h2 {
+.list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.list > h2 {
     padding-top: 20px;
     padding-bottom: 20px;
 }
@@ -163,6 +171,22 @@
 }
 
 .button-submit-form:hover {
+    background: #b4b4b4;
+    color: black;
+    transition: all .6s;
+    border: none;
+}
+
+.button-pin-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #525252;
+    border-radius: 12px;
+    border: none;
+}
+
+.button-pin-form:hover {
     background: #b4b4b4;
     color: black;
     transition: all .6s;
@@ -232,14 +256,24 @@
 	color: #ffffff;
 }
 
-.grid {
+.item-wrapper {
+    width: 99.5%;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 
+.grid {
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
 .grid-item {
-    flex-basis: calc(33.33% - 20px);
+    /* flex-basis: calc(33.33% - 20px); */
 }
 
 .search-wrapper {
@@ -306,6 +340,9 @@
     background: white;
     color: black;
     border: none;
+    border-radius: 12px;
+    padding: 0.7%;
+    text-align: center;
 }
 
 ::-webkit-scrollbar {
@@ -327,6 +364,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+hr {
+    width: 50%;
+    color: white;
+}
+
+.ssvg {
+    fill: white;
+}
+
+.btn-wrapper-form {
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
 }
 
 @media (max-width: 500px) {
@@ -452,7 +504,7 @@
         align-items: center;
     }
     
-    .notelist > h2 {
+    .list > h2 {
         padding-top: 20px;
         padding-bottom: 20px;
     }
@@ -564,13 +616,15 @@
     }
     
     .grid {
+        width: 100%;
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
     }
     
     .grid-item {
-        flex-basis: calc(33.33% - 20px);
+        width: 90%;
     }
 
     .searchForm {
@@ -583,5 +637,24 @@
     .searchInput {
         margin-top: 1%;
         width: 80%;
+    }
+
+    .item-wrapper {
+        width: 95%;
+    }
+
+    hr {
+        width: 75%;
+        color: white;
+    }
+
+    .btn-wrapper-form {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .search-records {
+        width: 85%;
     }
   }

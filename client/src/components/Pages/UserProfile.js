@@ -138,7 +138,7 @@ const UserProfile = () => {
           <div className='alert m-3 infoblock'>
             <div>
             <h1>Рады видеть, {username}!</h1>
-            <p>Дата регистрации {dateJoined.substring(0, 10)}</p>
+            <p>Дата регистрации {dateJoined.substring(0, 19).replace('T', ' ')}</p>
             <p>Email: {email}</p>
             <button className='formButton' onClick={handleLogout}>Выход</button>
             </div>

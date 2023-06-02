@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-
+import { ReactComponent as StarSVG } from '../UI/Icons/star.svg'
 
 const NotesList = () => {
-  
+
     const [ access ] = useState(localStorage.getItem('accessToken'))
     const [ notes, setNotes ] = useState([])
-  
+
     const notesFetch = async () => {
         await fetch('/api/note',
         {
@@ -34,47 +34,89 @@ const NotesList = () => {
 
     console.log(notes)
 
-    let deleteNote = (id) => {
+    let pinNote = (id) => {
         fetch(
-            `/api/delete-note/${id}`,
+          `/api/note/${id}`,
             {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'Authorization': `Bearer ${access}`,
-                }
+              method: 'PATCH',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${access}`,
+              },
+              body: JSON.stringify({is_pinned: true})
             }
-        ).then((response) => {
-            if (response.ok) {
-                console.log(`удаление заметки с ${response.status}`)
-                window.location.reload()
-            } else {
-                throw Error(`ошибка! ${response.status}`)
-            }
-        }).catch(error => {
-            console.log(`ошибка! ${error}`)
-        })
+        ).then(response => {
+          if (response.ok) {
+            console.log("response point 2 ok")
+            window.location.reload()
+          }
+      }).catch(error => {
+        console.log(error)
+        alert(`хуйня 1. ${error}`)
+      })
     }
 
-    let NoteParse = notes.map(function(item) {
+    let unPinNote = (id) => {
+        fetch(
+          `/api/note/${id}`,
+            {
+              method: 'PATCH',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${access}`,
+              },
+              body: JSON.stringify({is_pinned: false})
+            }
+        ).then(response => {
+          if (response.ok) {
+            console.log("response point 2 ok")
+            window.location.reload()
+          }
+      }).catch(error => {
+         console.log(error)
+         alert(`хуйня 2. ${error}`)
+      })
+    }
+
+    let notePinnedParse = notes.map(function(item) {
+        if (item.is_pinned == true) {
         return <div key={item.pk} className='card border-primary m-3 grid-item'>
                 <Link className='card-header noteTitle' to={`/user/note/${item.pk}`}>{item.title}</Link>
                 <div className='card-body'>
                   <h4 className='card-title'>{item.body}</h4>
                   <p className='card-text'>{item.tag}</p>
-                  <button className='button-submit-form' onClick={() => deleteNote(item.pk)}>Удалить заметку</button>
+                  <button className='button-pin-form ssvg' onClick={() => unPinNote(item.pk)}><StarSVG /></button>
                 </div>
             </div>
+        }
+    })
+
+    let noteUnpinnedParse = notes.map(function(item) {
+        if (item.is_pinned == false) {
+        return <div key={item.pk} className='card border-primary m-3 grid-item'>
+                <Link className='card-header noteTitle' to={`/user/note/${item.pk}`}>{item.title}</Link>
+                <div className='card-body'>
+                  <h4 className='card-title'>{item.body}</h4>
+                  <p className='card-text'>{item.tag}</p>
+                  <button className='button-pin-form' onClick={() => pinNote(item.pk)}><StarSVG /></button>
+                </div>
+            </div>
+        }
     })
     
     return (
         <div>
             {access?
-            <div className='notelist'>
+            <div className='list'>
                 <h2 className='mobile-info'>Количество заметок: {notes.length} <Link className='myButton' to='/user/create-note'>Добавить ещё</Link></h2>
                 <div className='grid'>
-                    {NoteParse}
+                    {notePinnedParse}
                 </div>
+                <hr />
+                <div className='grid'>
+                    {noteUnpinnedParse}
+                </div>
+
             </div>
             :
             !access?

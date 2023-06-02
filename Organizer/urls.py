@@ -54,4 +54,5 @@ urlpatterns = [
     path('api/search/note/', views.NoteSearch.as_view(), name='search-note'),
     path('api/search/todo/', views.ToDoSearch.as_view(), name='search-todo'),
     path('api/search/spend/', views.SpendSearch.as_view(), name='seach-spend'),
+    path('api/password-change/', views.ChangePasswordView.as_view(), name='change-password'),
 ]

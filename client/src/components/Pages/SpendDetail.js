@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const SpendDetail = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
     const [ spendData, setSpendData ] = useState([])
     const [ access ] = useState(localStorage.getItem('accessToken'))
     let [ spendTitle, setSpendTitle ] = useState('')
     let [ spendAmount, setSpendAmount ] = useState('')
-
-    var notification = document.querySelector('#forAlert')
+    const [ tags, setTags ] = useState([])
+    let [ spendTag, setSpendTag ] = useState('')
 
     const spendDataFetch = (id) => {
         fetch(
@@ -34,15 +35,44 @@ const SpendDetail = () => {
         })
     }
 
+    const tagsFetch = () => {
+        fetch(
+            '/api/spend-tags',
+            {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json;charset=utf-8',
+                  'Authorization': `Bearer ${access}`,
+                }
+            }
+        ).then(response => {
+            if (response.ok) {
+               console.log("reponse point 1 ok")
+               return response.json()
+            } else {
+              throw Error(`Что-то пошло не так: код ${response.status}`)
+             }
+        }).then(data => {
+            console.log(data)
+            setTags(data)
+        })
+    }
+
+    let tagParse = tags.map(function(item) {
+        return <option key={item.pk}>{item.title}</option>
+    })
+
     useEffect(() => {
         if (access) {
             spendDataFetch(id)
+            tagsFetch()
         }
     }, [access])
 
     const updatedData = {
         title: spendTitle,
-        amount: spendAmount
+        amount: spendAmount,
+        tag: spendTag
     }
 
     const spendDataUpdate = (id) => {
@@ -59,12 +89,11 @@ const SpendDetail = () => {
         ).then(response => {
             if (response.ok) {
                 console.log("response point 2 ok")
-                notification.value = 'Обновлено'
             }
         }).catch(error => {
            console.log(error)
            alert(`ошибка. ${error}`)
-        })
+        }).finally(navigate(`/user/spend`))
     }
 
     const spendDataDelete = (id) => {
@@ -85,23 +114,33 @@ const SpendDetail = () => {
             }
         }).then(data => {
             setSpendData(data)
-        })
+        }).finally(navigate(`/user/spend`))
     }
 
     const patchSpend = () => {
         spendDataUpdate(id)
     }
 
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          navigate("/user/spend")
+        }
+      })
+
     console.log(spendData)
 
   return (
-    <div>
-        <form className='NoteCreateForm alert m-3' onSubmit={patchSpend}>
+    <div className='ItemCreateWrapper'>
+        <form className='alert m-3' onSubmit={patchSpend}>
             <h2>Детали о покупке</h2>
             <input className='form-control mb-1' type='text' defaultValue={spendData.title} onChange={e => setSpendTitle(e.target.value)} />
             <input className='form-control mb-1' type='number' defaultValue={spendData.amount} onChange={e => setSpendAmount(e.target.value)} />
+            <select className='form-select mb-2' onChange={e => setSpendTag(e.target.value)}>
+                <option>Выберите тег</option>
+                {tagParse}
+            </select>
             <button className='w50p btn btn-success'>Сохранить</button>
-            <button id='forAlert' className='w50p btn btn-danger' onClick={() => spendDataDelete(id)}>Удалить</button>
+            <button className='w50p btn btn-danger' onClick={() => spendDataDelete(id)}>Удалить</button>
         </form>
     </div>
   )

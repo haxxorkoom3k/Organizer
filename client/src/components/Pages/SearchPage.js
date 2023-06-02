@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 const SearchPage = () => {
 
     const [ access ] = useState(localStorage.getItem('accessToken'))
-    const [ records, setRecords ] = useState([])
     const [ searchTerm, setSearchTerm ] = useState('')
     const [ loading, setLoading ] = useState()
+    let [ record, setRecord ] = useState([])
 
     const handleSearchInput = (e) => {
         setSearchTerm(e.target.value)
@@ -40,9 +41,18 @@ const SearchPage = () => {
                         throw Error(`Что-то пошло не так: код ${response.status}`)
                     }
                 }).then(data => {
-                    setRecords(data)
-            }).finally(setLoading(false))
+                    setLoading(false)
+                    setRecord(data.map(function(item) {
+                        return  <div key={item.pk} className='card border-primary m-3'>
+                                    <Link className='card-header noteTitle' to={`/user/note/${item.pk}`}>{item.title}</Link>
+                                    <div className='card-body'>
+                                      <h4 className='card-title'>{item.body}</h4>
+                                      <h5>{item.tag}</h5>
+                                    </div>
+                                </div>
+                }))})
         }
+        
         if (todo.checked) {
             setLoading(true)
             fetch(
@@ -60,9 +70,18 @@ const SearchPage = () => {
                         throw Error(`Что-то пошло не так: код ${response.status}`)
                     }
                 }).then(data => {
-                    setRecords(data)
-            }).finally(setLoading(false))
+                    setLoading(false)
+                    setRecord(data.map(function(item) {
+                        return  <div key={item.pk} className='card border-primary m-3'>
+                                    <Link className='card-header noteTitle' to={`/user/todo/${item.pk}`}>{item.title}</Link>
+                                    <div className='card-body'>
+                                      <h4 className='card-title'>{item.body}</h4>
+                                      <h5>{item.tag}</h5>
+                                    </div>
+                                </div>
+                }))})
         }
+
         if (spend.checked) {
             setLoading(true)
             fetch(
@@ -80,24 +99,18 @@ const SearchPage = () => {
                         throw Error(`Что-то пошло не так: код ${response.status}`)
                     }
                 }).then(data => {
-                    setRecords(data)
-            }).finally(setLoading(false))
-        }
+                    setLoading(false)
+                    setRecord(data.map(function(item) {
+                        return  <div key={item.pk} className='card border-primary m-3'>
+                                    <Link className='card-header noteTitle' to={`/user/spend/${item.pk}`}>{item.title}</Link>
+                                    <div className='card-body'>
+                                      <h4 className='card-title'>{item.body}</h4>
+                                      <h5>{item.tag}</h5>
+                                    </div>
+                                </div>
+                }))})
+            }
     }
-
-    let record = records.map(function(item) {
-        return  <div key={item.pk} className='card border-primary m-3'>
-                    <div className='card-header noteTitle'>{item.title}</div>
-                    <div className='card-body'>
-                      <h4 className='card-title'>{item.body}</h4>
-                      <h5>{item.tag}</h5>
-                    </div>
-                </div>
-    })
-
-    console.log(records)
-    console.log(searchTerm)
-
 
   return (
     <div>
@@ -120,7 +133,7 @@ const SearchPage = () => {
                     </div>
 
                 </div>
-                <input type='text' id='search_input' className='searchInput' placeholder='Введите название или тэг записи' value={searchTerm} onChange={handleSearchInput} />
+                <input type='text' id='search_input' className='searchInput' placeholder='Введите название или тег записи' value={searchTerm} onChange={handleSearchInput} />
                 <button type='submit' className='searchButton' onClick={SearchHandler}>Поиск</button>
             </div>
         </div>

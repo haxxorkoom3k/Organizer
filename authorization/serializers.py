@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, Serializer, CharField
+from rest_framework.serializers import ModelSerializer, Serializer, CharField, DateField
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework import serializers
@@ -30,7 +30,9 @@ class CreateUserSerializer(ModelSerializer):
         if User.objects.filter(username=self.validated_data['username'].user).exists():
             raise serializers.ValidationError("Пользователь уже существует")
         
-
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
 
 class LoginRequestSerializer(Serializer):
     model = User
@@ -43,7 +45,7 @@ class NoteSerializer(ModelSerializer):
 
     class Meta:
         model = Notes
-        fields = ['pk', 'owner', 'title', 'body', 'tag', 'update', 'created']
+        fields = ['pk', 'owner', 'is_pinned', 'title', 'body', 'tag', 'update', 'created']
   
 class TagsSerializer(ModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), default=serializers.CurrentUserDefault())

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const ToDoUpdate = () => {
 
@@ -10,6 +10,7 @@ const ToDoUpdate = () => {
     let [ todoTag, setToDoTag ] = useState('')
     let [ complete, setComplete ] = useState('')
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const getToDo = (id) => {
         fetch(
@@ -104,16 +105,43 @@ const ToDoUpdate = () => {
         }).catch(error => {
            console.log(error)
            alert(`ошибка. ${error}`)
-        })
+        }).finally(navigate(`/user/todo`))
     }
 
+    const deleteToDo = (id) => {
+        fetch(
+          `/api/delete-todo/${id}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8',
+              'Authorization': `Bearer ${access}`,
+            }}).then(response => {
+              if (response.ok) {
+                console.log(`Удаление ToDo с ${response.status}`)
+                window.location.reload()
+              } else {
+                throw Error(`ошибка! ${response.status}`)
+              }
+            }).catch(error => {
+              console.log(`ошибка ${error}`)
+            }).finally(navigate(`/user/todo`))
+      }
+
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          navigate("/user/todo")
+        }
+      })
+
+
   return (
-    <div>
+    <div className='ItemCreateWrapper'>
         <form className='alert m-3' onSubmit={submitHandler}>
             <h2>Обновление ToDo</h2>
             <input className='form-control mb-1' defaultValue={title} onChange={e => setTitle(e.target.value)} type='text' name='title' placeholder='Название' />
             <select className='form-select mb-2' defaultValue={todo.tag} onChange={selectHandler}>
-                <option></option>
+                <option>Выберите тег</option>
                 {tagParse}
             </select>
             <select name='todo-complete' defaultValue={todo.complete} className='form-select mb-2' onChange={e => setComplete(e.target.value)}>
@@ -122,6 +150,7 @@ const ToDoUpdate = () => {
                 <option value={'Нет'}>Нет</option>
             </select>
             <button className='w50p btn btn-success' type="submit" name="submit">Обновить</button>
+            <button className='w50p btn btn-danger' onClick={() => deleteToDo(id)}>Удалить</button>
         </form>
     </div>
   )

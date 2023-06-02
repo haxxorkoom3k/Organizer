@@ -33,26 +33,6 @@ const ToDoList = () => {
     }
   }, [access])
 
-  let deleteToDo = (id) => {
-    fetch(
-      `/api/delete-todo/${id}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-          'Authorization': `Bearer ${access}`,
-        }}).then(response => {
-          if (response.ok) {
-            console.log(`Удаление ToDo с ${response.status}`)
-            window.location.reload()
-          } else {
-            throw Error(`ошибка! ${response.status}`)
-          }
-        }).catch(error => {
-          console.log(`ошибка ${error}`)
-        })
-  }
-
   let completed = 0
   let completedTasks = toDo.map(function(item) {
     if (item.completed === 'Да') {
@@ -61,7 +41,6 @@ const ToDoList = () => {
                 <Link className='card-header noteTitle' to={`/user/todo/${item.pk}`}>{item.title}</Link>
                 <div className='card-body'>
                   <p className='card-text'>{item.tag}</p>
-                  <button className='button-submit-form' onClick={() => deleteToDo(item.pk)}>Удалить</button>
                 </div>
               </div>
     }
@@ -75,7 +54,6 @@ const ToDoList = () => {
                 <Link className='card-header noteTitle' to={`/user/todo/${item.pk}`}>{item.title}</Link>
                 <div className='card-body'>
                   <p className='card-text'>{item.tag}</p>
-                  <button className='button-submit-form' onClick={() => deleteToDo(item.pk)}>Удалить</button>
                 </div>
               </div>
     }
@@ -86,7 +64,7 @@ const ToDoList = () => {
   return (
     <div>
       {access?
-        <div className='m-3'>
+        <div className='list'>
           <h2 className='mobile-info'>Количество задач: {toDo.length} <Link className='myButton mobile-button' to='/user/create-todo'>Добавить новую</Link></h2>
           <h3 className='mt-3'>Выполнено: {completed}</h3>
           <div className='grid'>

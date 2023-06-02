@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const NoteUpdate = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
     const [ loading, setLoading ] = useState()
     const [ note, setNote ] = useState([])
     const [ noteTitle, setNoteTitle ] = useState('')
@@ -104,7 +105,7 @@ const NoteUpdate = () => {
     }).catch(error => {
        console.log(error)
        alert(`ошибка. ${error}`)
-    })
+    }).finally(navigate(`/user/note`))
   }
 
   let deleteNote = (id) => {
@@ -126,7 +127,7 @@ const NoteUpdate = () => {
           }
       }).catch(error => {
           console.log(`ошибка! ${error}`)
-      })
+      }).finally(navigate(`/user/note`))
     }
 
     const selectHandler = (e) => {
@@ -137,13 +138,20 @@ const NoteUpdate = () => {
       updateNote(id)
     }
 
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        navigate("/user/note")
+      }
+    })
+
   return (
-    <div>
-        <form className='NoteCreateForm alert m-3' onSubmit={updatedNote}>
+    <div className='ItemCreateWrapper'>
+        <form className='alert m-3' onSubmit={updatedNote}>
           <h2>Изменение заметки</h2>
           <input className='form-control mb-1' defaultValue={note.title} onChange={e => setNoteTitle(e.target.value)} type='text' name='title' placeholder='Название' />
-          <textarea className='form-control m-1' defaultValue={note.body} onChange={e => setNoteBody(e.target.value)} placeholder='Текст заметки' rows={10} cols={20}/>
-          <select className='form-select mb-2' onChange={selectHandler}>
+          <textarea className='form-control mb-1' defaultValue={note.body} onChange={e => setNoteBody(e.target.value)} placeholder='Текст заметки' rows={10} cols={20}/>
+          <select defaultValue={noteTag} className='form-select mb-2' onChange={selectHandler}>
+            <option>Выберите тег</option>
             {tagParse}
           </select>
           <button className='w50p btn btn-success' type="submit" name="submit">Обновить</button>
