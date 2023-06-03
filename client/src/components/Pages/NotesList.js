@@ -52,7 +52,7 @@ const NotesList = () => {
           }
       }).catch(error => {
         console.log(error)
-        alert(`хуйня 1. ${error}`)
+        alert(`ошибка. ${error}`)
       })
     }
 
@@ -74,7 +74,7 @@ const NotesList = () => {
           }
       }).catch(error => {
          console.log(error)
-         alert(`хуйня 2. ${error}`)
+         alert(`ошибка. ${error}`)
       })
     }
 
