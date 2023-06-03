@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.http import JsonResponse
 from django.contrib.auth import logout, authenticate
 from rest_framework.request import Request
@@ -13,9 +14,9 @@ from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from .models import Notes, Tags, ToDo, ToDo_tags, Spend, SpendTags
-from rest_framework import filters
 from rest_framework.filters import SearchFilter
 from django.db.models import Q
+
 
 
 class RegistrationAPI(CreateAPIView):
@@ -262,7 +263,18 @@ class getUserSpendMoney(generics.ListAPIView):
         total_spent = sum([a.amount for a in queryset])
         return Response({'total_spent': total_spent})
     
-    
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+class DailyMonthlyUserSpent(generics.ListAPIView):
+
+    def get(self, request):
+        owner = request.user
+        daily_queryset = Spend.objects.filter(owner=owner, date__day=timezone.now().day)
+        monthly_queryset = Spend.objects.filter(owner=owner, date__month=timezone.now().month)
+        daily_spent = sum([a.amount for a in daily_queryset])
+        monthly_spent = sum([a.amount for a in monthly_queryset])
+        return Response({'daily_spent': daily_spent, 'monthly_spent': monthly_spent})
+
 
 @permission_classes([IsAuthenticated])
 @authentication_classes([JWTAuthentication])

@@ -17,6 +17,8 @@ const UserProfile = () => {
       const [ todos, setTodos ] = useState([])
       const [ spends, setSpends ] = useState([])
 
+      const [ spent, setSpent ] = useState([])
+
       const handleLogout = () => {
         fetch('/api/user/logout',
         {
@@ -128,7 +130,29 @@ const UserProfile = () => {
       }
     }, [access])
 
-
+    useEffect(() => {
+      if (access) {
+        fetch(
+          '/api/spend/md-spent/',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8',
+              'Authorization': `Bearer ${access}`,
+            },
+          }
+        ).then(response => {
+          if (response.ok) {
+            return response.json()
+          } else {
+            throw Error(`ошибка! ${response.status}`)
+          }
+        }).then(data => {
+          setSpent(data)
+          console.log(data)
+        })
+      }
+    }, [access])
 
     return (
     <div>
@@ -137,15 +161,17 @@ const UserProfile = () => {
         <div className='userprof-wrapper'>
           <div className='alert m-3 infoblock'>
             <div>
-            <h1>Рады видеть, {username}!</h1>
-            <p>Дата регистрации {dateJoined.substring(0, 19).replace('T', ' ')}</p>
-            <p>Email: {email}</p>
-            <button className='formButton' onClick={handleLogout}>Выход</button>
+              <h1>Рады видеть, {username}!</h1>
+              <p>Дата регистрации {dateJoined.substring(0, 19).replace('T', ' ')}</p>
+              <p>Email: {email}</p>
+              <button className='formButton' onClick={handleLogout}>Выход</button>
             </div>
-            <div>
+            <div className='user-info-wrap'>
               <h5><NoteSVG/> Количество заметок: {notes.length}</h5>
               <h5><ToDoSVG /> Количество заданий: {todos.length}</h5>
               <h5><WalletSVG /> Количество покупок: {spends.length}</h5>
+              <p>Потрачено за месяц: {spent.monthly_spent} &#x20bd;</p>
+              <p>Потрачено за день: {spent.daily_spent} &#x20bd;</p>
             </div>
           </div>
         </div>
