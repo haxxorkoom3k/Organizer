@@ -164,6 +164,17 @@
     justify-content: center;
 }
 
+.user-info-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.user-info-wrap > p {
+    margin-bottom: 0;
+    color: #c7c6c6;
+}
+
 .button-submit-form {
     background: #525252;
     border-radius: 12px;
