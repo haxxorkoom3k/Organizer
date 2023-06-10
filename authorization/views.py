@@ -1,6 +1,6 @@
 from django.utils import timezone
 from django.http import JsonResponse
-from django.contrib.auth import logout, authenticate
+from django.contrib.auth import logout, authenticate, login
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, renderer_classes
@@ -15,6 +15,8 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from .models import Notes, Tags, ToDo, ToDo_tags, Spend, SpendTags
 from rest_framework.filters import SearchFilter
+from django.contrib.auth.hashers import make_password
+from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 from django.db.models import Q
 
 
@@ -58,22 +60,45 @@ class LogoutAPIView(APIView):
 
         return Response(status=status.HTTP_200_OK)
 
-# не работает
 @permission_classes([IsAuthenticated])
 @authentication_classes([JWTAuthentication])
 class ChangePasswordView(APIView):
+
     def post(self, request):
-        serializer = ChangePasswordSerializer(data=request.data)
-        if serializer.is_valid():
-            user = authenticate(username=request.user.username, password=serializer.validated_data['old_password'])
-            if user is not None:
-                user.set_password(serializer.validated_data['new_password'])
-                user.save()
-                return Response({"message": "Пароль успешно изменен"}, status=status.HTTP_200_OK)
-            else:
-                return Response({"message": "Старый пароль неверный"}, status=status.HTTP_400_BAD_REQUEST)
+        user = request.user
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+        confirm_password = request.data.get('confirm_password')
+
+        if not user.check_password(old_password):
+            return Response({"old_password": ["Неверный старый пароль"]}, status=status.HTTP_400_BAD_REQUEST)
+
+        if new_password != confirm_password:
+            return Response({"new_password": ["Пароли не одинаковые"]}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.password = make_password(new_password)
+        user.save()
+        return Response({"detail": "Пароль успешно изменён"}, status=status.HTTP_200_OK)
+
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+class EmailChangeView(APIView):
+
+    def post(self, request):
+        user = request.user
+        password = request.data.get('password')
+        new_email = request.data.get('new_email')
+
+        if not user.check_password(password):
+            return Response({'password': 'Неверный пароль'})
+        
+        if new_email:
+            user.email = new_email
+            user.save()
+            return Response(status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
 
 @permission_classes([IsAuthenticated])
 @authentication_classes([JWTAuthentication])
